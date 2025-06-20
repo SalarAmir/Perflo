@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perflo - AI Automation & Development Agency</title>
+    
+    <!-- React, ReactDOM, and Babel for JSX -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Animation Libraries -->
+    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <script src="https://unpkg.com/scrollreveal"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS Styles -->
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-med: #1a1a1a;
+            --bg-light: #2a2a2a;
+            --text-light: #f8f8f8;
+            --text-med: #a0a0a0;
+            --text-dark: #666666;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --pink: #ec4899;
+        }
+
+        /* Base Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 119, 198, 0.15), transparent);
+            color: var(--text-light);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            /* cursor: none; has been removed */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Typography & Utility */
+        h1, h2, h3, h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Mouse Trail */
+        .mouse-trail {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0) 60%);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            filter: blur(20px);
+            transition: all 0.1s ease-out;
+        }
+        
+        /* cursor: none; for a and button has been removed */
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 1.25rem 0;
+        }
+        .navbar.scrolled {
+            background-color: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .nav-links {
+            display: none; /* Hidden on mobile */
+        }
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+            }
+        }
+        .nav-links a, .mobile-nav-links a {
+            color: var(--text-med);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--blue);
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .cta-button {
+            display: none; /* Hidden on mobile */
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 500;
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+        @media (min-width: 768px) {
+            .cta-button {
+                display: block;
+            }
+        }
+
+        .mobile-menu-button {
+            display: block;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        @media (min-width: 768px) {
+            .mobile-menu-button {
+                display: none;
+            }
+        }
+
+        .mobile-nav-links {
+            background-color: var(--bg-med);
+            padding: 1rem 0;
+            text-align: center;
+        }
+        .mobile-nav-links a {
+            display: block;
+            padding: 0.75rem;
+        }
+        .mobile-nav-links a.active {
+            color: var(--blue);
+        }
+
+        /* Hero Section */
+        #home {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 5rem;
+            /* background removed to show body gradient */
+        }
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+        @media (min-width: 768px) {
+            .hero-content {
+                flex-direction: row;
+                text-align: left;
+            }
+        }
+        .hero-text {
+            flex: 1;
+            text-align: center;
+        }
+        @media (min-width: 768px) {
+            .hero-text {
+                text-align: left;
+            }
+        }
+        .hero-text h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .hero-text h1 {
+                font-size: 3.75rem;
+            }
+        }
+        .hero-text p {
+            font-size: 1.125rem;
+            color: var(--text-med);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .hero-text p {
+                margin-left: 0;
+            }
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        @media (min-width: 768px) {
+            .hero-buttons {
+                justify-content: flex-start;
+            }
+        }
+        .hero-image-container {
+            flex: 1;
+            position: relative;
+        }
+        .hero-image {
+            width: 100%;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Section Generic Styles */
+        .section {
+            padding: 5rem 0;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-header .subtitle {
+            color: var(--blue);
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .section-header p {
+            color: var(--text-med);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .service-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--blue);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+        }
+        .service-card .icon-wrapper {
+            width: 3.5rem;
+            height: 3.5rem;
+            background-color: rgba(59, 130, 246, 0.1);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--blue);
+        }
+        .service-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .service-card p {
+            color: var(--text-med);
+        }
+
+        /* Work Section */
+        .work-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .work-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .work-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .work-card {
+            background: var(--bg-med);
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .work-card:hover {
+            border-color: var(--blue);
+        }
+        .work-card-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        .work-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .work-card:hover .work-card-image img {
+            transform: scale(1.05);
+        }
+        .work-card-content {
+            padding: 1.5rem;
+        }
+        .work-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .work-card p {
+            color: var(--text-med);
+            margin-bottom: 1rem;
+        }
+        .work-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .work-card-tags span {
+            font-size: 0.75rem;
+            background-color: var(--bg-light);
+            color: var(--blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+        }
+        
+        /* Tech Stack Section */
+        .tech-grid {
+            display: grid;
+            gap: 3rem;
+            background-color: rgba(30, 30, 30, 0.5);
+            padding: 3rem;
+            border-radius: 1rem;
+            border: 1px solid var(--bg-light);
+        }
+        @media (min-width: 768px) {
+            .tech-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        .tech-column h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-light);
+        }
+        .tech-icons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: center;
+            color: var(--text-med);
+            transition: all 0.3s ease;
+        }
+        .tech-item:hover {
+            color: var(--text-light);
+            transform: translateY(-5px);
+        }
+        .tech-item i {
+            font-size: 2.5rem;
+        }
+        .tech-item span {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact-form {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: rgba(30, 30, 30, 0.5);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--bg-light);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-med);
+            font-size: 0.875rem;
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.875rem;
+            background-color: var(--bg-med);
+            border: 1px solid var(--bg-light);
+            border-radius: 0.5rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        textarea.form-input {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 0 2rem 0;
+            border-top: 1px solid var(--bg-light);
+        }
+        .footer-content {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+        .footer-col h4 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+        .footer-col p, .footer-col a {
+            color: var(--text-med);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-col a:hover {
+            color: var(--text-light);
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .footer-bottom {
+            border-top: 1px solid var(--bg-light);
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-dark);
+        }
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+        .footer-bottom-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        .footer-bottom-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .footer-bottom-links a:hover {
+            color: var(--text-med);
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { motion, AnimatePresence } = window.Motion;
+
+        const MouseTrail = () => {
+            const [position, setPosition] = useState({ x: -100, y: -100 });
+
+            useEffect(() => {
+                const handleMouseMove = (e) => {
+                    setPosition({ x: e.clientX, y: e.clientY });
+                };
+                window.addEventListener('mousemove', handleMouseMove);
+                return () => window.removeEventListener('mousemove', handleMouseMove);
+            }, []);
+
+            return (
+                <motion.div
+                    className="mouse-trail"
+                    animate={{ x: position.x, y: position.y }}
+                    transition={{ type: "spring", stiffness: 500, damping: 30, restDelta: 0.001 }}
+                />
+            );
+        };
+        
+        const App = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [activeSection, setActiveSection] = useState('home');
+            const [isScrolled, setIsScrolled] = useState(false);
+            
+            useEffect(() => {
+                // Initialize ScrollReveal
+                ScrollReveal().reveal('.reveal', {
+                    delay: 200,
+                    distance: '30px',
+                    origin: 'bottom',
+                    easing: 'cubic-bezier(0.5, 0, 0, 1)',
+                    reset: false // Set to false to only animate once
+                });
+                
+                const handleScroll = () => {
+                    setIsScrolled(window.scrollY > 50);
+                    
+                    const sections = ['home', 'services', 'work', 'tech', 'contact'];
+                    let currentSection = 'home';
+                    for (const id of sections) {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            const rect = element.getBoundingClientRect();
+                            if (rect.top <= 150 && rect.bottom >= 150) {
+                                currentSection = id;
+                                break;
+                            }
+                        }
+                    }
+                    setActiveSection(currentSection);
+                };
+                
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+            
+            const services = [
+                {
+                    title: "AI Automation",
+                    description: "Streamline business processes with custom AI solutions that reduce costs and increase efficiency.",
+                    icon: "fas fa-robot"
+                },
+                {
+                    title: "Machine Learning",
+                    description: "Leverage the power of machine learning to gain insights from your data and make smarter decisions.",
+                    icon: "fas fa-brain"
+                },
+                {
+                    title: "Custom AI Solutions",
+                    description: "Tailored AI applications designed specifically for your business needs and challenges.",
+                    icon: "fas fa-cogs"
+                },
+            ];
+            
+            const projects = [
+                 {
+                    title: "Smart Retail Assistant",
+                    description: "AI-powered shopping assistant that increased sales by 35% for our retail client.",
+                    tags: ["Python", "TensorFlow", "NLP"],
+                    image: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                },
+                {
+                    title: "Healthcare Diagnosis AI",
+                    description: "Machine learning model that assists doctors in diagnosing diseases with 92% accuracy.",
+                    tags: ["PyTorch", "Computer Vision", "Healthcare"],
+                    image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                },
+                {
+                    title: "Financial Fraud Detection",
+                    description: "Real-time fraud detection system that reduced false positives by 60% for a banking client.",
+                    tags: ["Anomaly Detection", "Time Series", "AWS"],
+                    image: "https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                }
+            ];
+
+            const automationTech = [
+                { name: "n8n", icon: "fas fa-gears" },
+                { name: "Zapier", icon: "fas fa-bolt" },
+                { name: "Make", icon: "fas fa-puzzle-piece" },
+                { name: "Airtable", icon: "fas fa-table" },
+            ];
+
+            const developmentTech = [
+                { name: "JavaScript", icon: "fab fa-js-square" },
+                { name: "React", icon: "fab fa-react" },
+                { name: "Node.js", icon: "fab fa-node-js" },
+                { name: "Python", icon: "fab fa-python" },
+                { name: "Java", icon: "fab fa-java" },
+                { name: "Spring", icon: "fas fa-leaf" },
+                { name: "SQL", icon: "fas fa-database" },
+                { name: "Docker", icon: "fab fa-docker" },
+            ];
+            
+            return (
+                <div>
+                    <MouseTrail />
+                    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+                        <div className="container navbar-content">
+                            <a href="#home" className="nav-brand gradient-text">Perflo</a>
+                            <div className="nav-links">
+                                <a href="#home" className={activeSection === 'home' ? 'active' : ''}>Home</a>
+                                <a href="#services" className={activeSection === 'services' ? 'active' : ''}>Services</a>
+                                <a href="#work" className={activeSection === 'work' ? 'active' : ''}>Work</a>
+                                <a href="#tech" className={activeSection === 'tech' ? 'active' : ''}>Tech</a>
+                                <a href="#contact" className={activeSection === 'contact' ? 'active' : ''}>Contact</a>
+                            </div>
+                            <a href="#contact" className="cta-button">Get Started</a>
+                            <button className="mobile-menu-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                                <i className={isMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+                            </button>
+                        </div>
+                        <AnimatePresence>
+                            {isMenuOpen && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="mobile-nav-links"
+                                >
+                                    <a href="#home" onClick={() => setIsMenuOpen(false)}>Home</a>
+                                    <a href="#services" onClick={() => setIsMenuOpen(false)}>Services</a>
+                                    <a href="#work" onClick={() => setIsMenuOpen(false)}>Work</a>
+                                    <a href="#tech" onClick={() => setIsMenuOpen(false)}>Tech</a>
+                                    <a href="#contact" onClick={() => setIsMenuOpen(false)}>Contact</a>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </nav>
+
+                    <main>
+                        <section id="home">
+                            <div className="container hero-content reveal">
+                                <div className="hero-text">
+                                    <h1><span className="gradient-text">AI-Powered</span> Solutions for the Future</h1>
+                                    <p>We build cutting-edge AI automation and development solutions that transform businesses and drive innovation.</p>
+                                    <div className="hero-buttons">
+                                        <a href="#contact" className="cta-button">Get Started</a>
+                                    </div>
+                                </div>
+                                <div className="hero-image-container">
+                                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="AI Robot" className="hero-image" />
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="services" className="section">
+                            <div className="container">
+                                <div className="section-header reveal">
+                                    <span className="subtitle">Our Expertise</span>
+                                    <h2>AI Services That <span className="gradient-text">Drive Results</span></h2>
+                                    <p>We specialize in creating custom AI solutions that solve real business problems and deliver measurable impact.</p>
+                                </div>
+                                <div className="services-grid">
+                                    {services.map((service, index) => (
+                                        <div key={index} className="service-card reveal">
+                                            <div className="icon-wrapper"><i className={service.icon}></i></div>
+                                            <h3>{service.title}</h3>
+                                            <p>{service.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="work" className="section">
+                             <div className="container">
+                                <div className="section-header reveal">
+                                    <span className="subtitle">Our Work</span>
+                                    <h2>Case Studies That <span className="gradient-text">Showcase Our Skills</span></h2>
+                                     <p>Explore how we've helped businesses leverage AI to solve complex challenges and achieve remarkable results.</p>
+                                </div>
+                                <div className="work-grid">
+                                    {projects.map((project, index) => (
+                                        <div key={index} className="work-card reveal">
+                                            <div className="work-card-image">
+                                                <img src={project.image} alt={project.title} />
+                                            </div>
+                                            <div className="work-card-content">
+                                                <h3>{project.title}</h3>
+                                                <p>{project.description}</p>
+                                                <div className="work-card-tags">
+                                                    {project.tags.map(tag => <span key={tag}>{tag}</span>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <section id="tech" className="section">
+                            <div className="container">
+                                <div className="section-header reveal">
+                                    <span className="subtitle">Our Stack</span>
+                                    <h2>Technologies We <span className="gradient-text">Excel In</span></h2>
+                                </div>
+                                <div className="tech-grid reveal">
+                                    <div className="tech-column">
+                                        <h3>Automation & Integration</h3>
+                                        <div className="tech-icons-container">
+                                            {automationTech.map(tech => (
+                                                <div key={tech.name} className="tech-item">
+                                                    <i className={tech.icon}></i>
+                                                    <span>{tech.name}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="tech-column">
+                                        <h3>Development & Data</h3>
+                                        <div className="tech-icons-container">
+                                            {developmentTech.map(tech => (
+                                                <div key={tech.name} className="tech-item">
+                                                    <i className={tech.icon}></i>
+                                                    <span>{tech.name}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="contact" className="section">
+                            <div className="container">
+                                <div className="section-header reveal">
+                                    <span className="subtitle">Get in Touch</span>
+                                    <h2>Let's <span className="gradient-text">Build Something</span> Amazing</h2>
+                                     <p>Have a project in mind or just want to say hi? We'd love to hear from you.</p>
+                                </div>
+                                <form className="contact-form reveal" onSubmit={(e) => e.preventDefault()}>
+                                    <div className="form-group">
+                                        <label htmlFor="name" className="form-label">Full Name</label>
+                                        <input type="text" id="name" name="name" className="form-input" placeholder="Your Name" required />
+                                    </div>
+                                     <div className="form-group">
+                                        <label htmlFor="email" className="form-label">Email Address</label>
+                                        <input type="email" id="email" name="email" className="form-input" placeholder="your@email.com" required />
+                                    </div>
+                                     <div className="form-group">
+                                        <label htmlFor="message" className="form-label">Message</label>
+                                        <textarea id="message" name="message" className="form-input" placeholder="Tell us about your project..."></textarea>
+                                    </div>
+                                    <button type="submit" className="cta-button" style={{width: '100%', display: 'block'}}>Send Message</button>
+                                </form>
+                            </div>
+                        </section>
+
+                    </main>
+
+                    <footer>
+                        <div className="container">
+                            <div className="footer-content">
+                                <div className="footer-col">
+                                    <h4 className="gradient-text nav-brand">Perflo</h4>
+                                    <p>Leading AI automation and development agency helping businesses transform with cutting-edge technology.</p>
+                                </div>
+                                <div className="footer-col">
+                                    <h4>Services</h4>
+                                    <ul>
+                                        {services.map(s => <li key={s.title}><a href="#services">{s.title}</a></li>)}
+                                    </ul>
+                                </div>
+                                <div className="footer-col">
+                                    <h4>Company</h4>
+                                    <ul>
+                                        <li><a href="#">Careers</a></li>
+                                        <li><a href="#">Blog</a></li>
+                                    </ul>
+                                </div>
+                                <div className="footer-col">
+                                    <h4>Connect</h4>
+                                     <ul>
+                                        <li><a href="#contact">Contact</a></li>
+                                        <li><a href="#">LinkedIn</a></li>
+                                        <li><a href="#">Twitter</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div className="footer-bottom">
+                                <p>© {new Date().getFullYear()} Perflo AI. All rights reserved.</p>
+                                <div className="footer-bottom-links">
+                                    <a href="#">Privacy Policy</a>
+                                    <a href="#">Terms of Service</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
