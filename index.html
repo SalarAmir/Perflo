@@ -49,7 +49,7 @@
             overflow-x: hidden;
             margin: 0;
             padding: 0;
-            /* cursor: none; has been removed */
+            cursor: none;
         }
 
         .container {
@@ -57,6 +57,10 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 1rem;
+        }
+        
+        a, button, input[type="submit"] {
+            cursor: none;
         }
 
         /* Typography & Utility */
@@ -76,23 +80,28 @@
             color: transparent;
         }
         
-        /* Mouse Trail */
-        .mouse-trail {
+        /* Custom Cursor and Trail */
+        .cursor-and-trail {
             position: fixed;
             top: 0;
             left: 0;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0) 60%);
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            transform: translate(-50%, -50%);
             z-index: 9999;
-            filter: blur(20px);
-            transition: all 0.1s ease-out;
         }
-        
-        /* cursor: none; for a and button has been removed */
+        .custom-cursor {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease-out;
+        }
+        .custom-cursor.hovered {
+            transform: translate(-50%, -50%) scale(1.5);
+        }
 
         /* Navigation */
         .navbar {
@@ -119,7 +128,7 @@
             font-weight: 700;
         }
         .nav-links {
-            display: none; /* Hidden on mobile */
+            display: none;
         }
         @media (min-width: 768px) {
             .nav-links {
@@ -155,14 +164,13 @@
         }
 
         .cta-button {
-            display: none; /* Hidden on mobile */
+            display: none;
             padding: 0.75rem 1.5rem;
             border: none;
             border-radius: 9999px;
             color: white;
             font-weight: 500;
             background: linear-gradient(90deg, var(--blue), var(--purple));
-            cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
         }
@@ -182,7 +190,6 @@
             border: none;
             color: var(--text-light);
             font-size: 1.5rem;
-            cursor: pointer;
         }
         @media (min-width: 768px) {
             .mobile-menu-button {
@@ -209,7 +216,6 @@
             display: flex;
             align-items: center;
             padding-top: 5rem;
-            /* background removed to show body gradient */
         }
         .hero-content {
             display: flex;
@@ -568,23 +574,72 @@
         const { useState, useEffect, useRef } = React;
         const { motion, AnimatePresence } = window.Motion;
 
-        const MouseTrail = () => {
-            const [position, setPosition] = useState({ x: -100, y: -100 });
+        const CursorAndTrail = () => {
+            const [position, setPosition] = useState({ x: 0, y: 0 });
+            const [trail, setTrail] = useState([]);
+            const [isHovering, setIsHovering] = useState(false);
+            const animationFrameId = useRef(null);
 
             useEffect(() => {
                 const handleMouseMove = (e) => {
                     setPosition({ x: e.clientX, y: e.clientY });
                 };
+
+                const handleMouseOver = (e) => {
+                    if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                        setIsHovering(true);
+                    }
+                };
+
+                const handleMouseOut = (e) => {
+                     if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
+                        setIsHovering(false);
+                    }
+                };
+
+                const updateTrail = () => {
+                    setTrail(prevTrail => {
+                        const newTrail = [...prevTrail, position];
+                        // Limit trail length for performance
+                        while (newTrail.length > 20) {
+                            newTrail.shift();
+                        }
+                        return newTrail;
+                    });
+                    animationFrameId.current = requestAnimationFrame(updateTrail);
+                };
+
                 window.addEventListener('mousemove', handleMouseMove);
-                return () => window.removeEventListener('mousemove', handleMouseMove);
-            }, []);
+                document.body.addEventListener('mouseover', handleMouseOver);
+                document.body.addEventListener('mouseout', handleMouseOut);
+                animationFrameId.current = requestAnimationFrame(updateTrail);
+
+                return () => {
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    document.body.removeEventListener('mouseover', handleMouseOver);
+                    document.body.removeEventListener('mouseout', handleMouseOut);
+                    cancelAnimationFrame(animationFrameId.current);
+                };
+            }, [position]);
+
+            const path = "M" + trail.map(p => `${p.x} ${p.y}`).join(" L");
 
             return (
-                <motion.div
-                    className="mouse-trail"
-                    animate={{ x: position.x, y: position.y }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30, restDelta: 0.001 }}
-                />
+                <div className="cursor-and-trail">
+                    <svg width="100%" height="100%">
+                        <defs>
+                            <linearGradient id="fadeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style={{stopColor: 'rgba(59, 130, 246, 0)'}} />
+                                <stop offset="100%" style={{stopColor: 'rgba(59, 130, 246, 0.5)'}} />
+                            </linearGradient>
+                        </defs>
+                        <path d={path} fill="none" stroke="url(#fadeGradient)" strokeWidth="4" strokeLinecap="round" />
+                    </svg>
+                    <div 
+                        className={`custom-cursor ${isHovering ? 'hovered' : ''}`}
+                        style={{ left: `${position.x}px`, top: `${position.y}px` }}
+                    />
+                </div>
             );
         };
         
@@ -600,7 +655,7 @@
                     distance: '30px',
                     origin: 'bottom',
                     easing: 'cubic-bezier(0.5, 0, 0, 1)',
-                    reset: false // Set to false to only animate once
+                    reset: false
                 });
                 
                 const handleScroll = () => {
@@ -684,7 +739,7 @@
             
             return (
                 <div>
-                    <MouseTrail />
+                    <CursorAndTrail />
                     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
                         <div className="container navbar-content">
                             <a href="#home" className="nav-brand gradient-text">Perflo</a>
