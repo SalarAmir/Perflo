@@ -1,0 +1,23 @@
+/* --- CTA Section --- */
+.cta-section {
+  padding: 100px 0;
+  background: var(--primary);
+  color: white;
+  text-align: center;
+}
+
+.cta-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-section h2 {
+  font-size: 3rem;
+  margin-bottom: 24px;
+}
+
+.cta-section p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}

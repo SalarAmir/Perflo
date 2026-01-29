@@ -1,0 +1,355 @@
+/* --- Hero Section --- */
+.hero {
+  padding: 100px 0 100px;
+  background: linear-gradient(135deg, #F0F4F8 0%, #FFFFFF 100%);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  margin-top: 60px;
+}
+
+.hero-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(46,191,165,0.12) 0%, rgba(255,255,255,0) 70%);
+  top: -200px;
+  right: -200px;
+  z-index: 0;
+  animation: blob-float 8s ease-in-out infinite;
+}
+
+.hero-blob-2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, rgba(255,255,255,0) 70%);
+  bottom: -100px;
+  left: -100px;
+  z-index: 0;
+  animation: blob-float 10s ease-in-out infinite reverse;
+}
+
+@keyframes blob-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 24px;
+  color: var(--primary);
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  max-width: 500px;
+}
+
+.cta-group {
+  display: flex;
+  gap: 20px;
+}
+
+.hero-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 260px;
+  z-index: 10;
+}
+
+.stat-card.top {
+  top: 0;
+  right: 40px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.stat-card.bottom {
+  bottom: 40px;
+  left: 0;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(46, 191, 165, 0.1);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-text h4 {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.stat-text p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Main Dashboard Styles */
+.main-dashboard {
+  width: 100%;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  border: 1px solid rgba(0,0,0,0.05);
+  margin: 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.main-dashboard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), #6366f1, #f59e0b, #10b981);
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f4f8;
+  margin-bottom: 24px;
+}
+
+.dashboard-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(46, 191, 165, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-title {
+  height: 8px;
+  background: linear-gradient(90deg, #e2e8f0 0%, #f0f4f8 100%);
+  border-radius: 4px;
+  flex: 1;
+}
+
+.dashboard-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: #10b981;
+  border-radius: 50%;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.dashboard-workflow {
+  position: relative;
+  height: 140px;
+  margin: 20px 0;
+}
+
+.workflow-lines {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 1;
+}
+
+.workflow-nodes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  padding: 0 10px;
+}
+
+.workflow-node {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: white;
+  border: 2px solid;
+}
+
+.workflow-node.input-node {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, white 100%);
+}
+
+.workflow-node.process-node {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(46, 191, 165, 0.15) 0%, white 100%);
+  transform: scale(1.1);
+}
+
+.workflow-node.notify-node {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, white 100%);
+}
+
+.workflow-node.output-node {
+  border-color: #10b981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, white 100%);
+}
+
+.node-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 18px;
+  border: 2px solid #6366f1;
+  opacity: 0;
+}
+
+.node-ring.accent {
+  border-color: var(--accent);
+}
+
+.node-ring.warning {
+  border-color: #f59e0b;
+}
+
+.node-ring.success {
+  border-color: #10b981;
+}
+
+.data-flow-particle {
+  position: absolute;
+  top: 17px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(46, 191, 165, 0.4);
+  z-index: 3;
+}
+
+.workflow-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 0 5px;
+}
+
+.workflow-labels span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-align: center;
+  width: 60px;
+}
+
+.dashboard-footer {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f4f8;
+  margin-top: 16px;
+}
+
+.mini-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mini-stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.mini-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* --- Responsive --- */
+@media (max-width: 968px) {
+  .hero-content h1 { 
+    font-size: 2.5rem; 
+  }
+  .hero-content p { 
+    margin: 0 auto 30px; 
+  }
+  .cta-group { 
+    justify-content: center; 
+    flex-wrap: wrap;
+  }
+  .stat-card.top { 
+    right: 0; 
+  }
+  .stat-card.bottom { 
+    left: 0; 
+  }
+  .workflow-node {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+  .workflow-labels span {
+    font-size: 0.6rem;
+    width: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-dashboard {
+    padding: 16px;
+  }
+  .dashboard-footer {
+    gap: 20px;
+  }
+  .stat-card {
+    display: none;
+  }
+}

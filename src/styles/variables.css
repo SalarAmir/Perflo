@@ -1,0 +1,38 @@
+:root {
+  --primary: #0B2545; /* Deep Navy */
+  --accent: #2EBFA5; /* Medical Teal */
+  --accent-hover: #249A85;
+  --light-bg: #F0F4F8;
+  --white: #ffffff;
+  --text-main: #13293D;
+  --text-muted: #5D7285;
+  --border-radius: 12px;
+  --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  --shadow: 0 10px 30px rgba(0,0,0,0.05);
+  --shadow-hover: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-main);
+  background-color: var(--white);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}

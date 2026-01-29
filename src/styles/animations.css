@@ -1,0 +1,23 @@
+/* --- Animations --- */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: var(--transition);
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 0 0 rgba(46, 191, 165, 0.4); }
+  70% { box-shadow: 0 0 0 15px rgba(46, 191, 165, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 191, 165, 0); }
+}
